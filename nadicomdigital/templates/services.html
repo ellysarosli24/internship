@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servis Nadicom Digital</title>
+    <style>
+        /* === CSS Variables === */
+        :root {
+            --primary: #555879;
+            --secondary: #98A1BC;
+            --accent: #25D366;
+        }
+
+        /* === Base Styles === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        /* === Service Grid === */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+            padding: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .service-content {
+            padding: 1.5rem;
+        }
+
+        .service-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        /* === Category Filter === */
+        .category-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* === Responsive === */
+        @media (max-width: 768px) {
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .pay-now-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .pay-now-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(85, 88, 121, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pakej Perkhidmatan Kami</h1>
+        
+        <div class="category-filter">
+            <button class="filter-btn active" data-category="all">Semua</button>
+            {% for value, label in categories %}
+                <button class="filter-btn" data-category="{{ category.0 }}">
+                    {{ label }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <div class="service-grid">
+        {% for service in services %}
+        <div class="service-card">
+            <h3>{{ service.name }}</h3>
+            <p class="price">RM{{ service.price }}</p>
+            <a href="/payment/{{ service.id }}/" class="pay-now-btn">
+                Bayar Sekarang
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+
+    <script>
+        // Category Filter Functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Filter services
+                const category = btn.dataset.category;
+                document.querySelectorAll('.service-card').forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Simple animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

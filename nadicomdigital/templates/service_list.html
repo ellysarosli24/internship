@@ -1,0 +1,483 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servis Nadicom Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === CSS Variables (Sama dengan Homepage) === */
+        :root {
+            --primary: #555879;
+            --secondary: #98A1BC;
+            --accent: #DED3C4;
+            --light: #F4EBD3;
+            --white: #ffffff;
+            --dark: #333333;
+             --primary-light: #6d72a1;
+        }
+
+        /* === Base Styles (Sama dengan Homepage) === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* === Navigation (Sama Persis Homepage) === */
+        .navbar {
+            background-color: transparent;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .navbar.scrolled .logo-text {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled .nav-links li a {
+            color: var(--primary);
+        }
+
+        .cta-button-nav {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 1.5rem;
+            border: 2px solid var(--primary);
+            display: inline-block;
+        }
+
+        .cta-button-nav:hover {
+            background-color: transparent;
+            color: var(--primary) !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar.scrolled .cta-button-nav {
+            background-color: var(--primary);
+            color: white !important;
+        }
+
+        .navbar.scrolled .cta-button-nav:hover {
+            background-color: transparent;
+            color: var(--primary) !important;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .navbar.scrolled .hamburger {
+            color: var(--primary);
+        }
+
+        /* === Main Content Styles === */
+        .main-content {
+            padding: 8rem 0 3rem;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+
+        /* === Filter Sidebar === */
+        .shopee-layout {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .filter-sidebar {
+            width: 250px;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filter-sidebar h3 {
+            margin-top: 0;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .filter-item {
+            display: block;
+            padding: 10px 0;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-item:last-child {
+            border-bottom: none;
+        }
+
+        .filter-item:hover, .filter-item.active {
+            color: var(--primary);
+            font-weight: 500;
+            padding-left: 5px;
+        }
+
+        /* === Service Grid === */
+        .service-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+            overflow: visible;
+        }
+
+        .service-card h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .pay-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            text-align: center;
+            width: calc(100% - 3rem);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: 2px solid var(--primary);
+            box-sizing: border-box;
+        }
+
+        .pay-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--primary-light);
+        z-index: -1;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.3s ease;
+    }
+
+    .pay-btn:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+        /* === Footer (Sama dengan Homepage) === */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .social-links {
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* === Responsive Design (Sama dengan Homepage) === */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 80px;
+                right: 5%;
+                width: 90%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-radius: 5px;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 0;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid #eee;
+                width: 100%;
+            }
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+            .cta-button-nav {
+                margin: 0.5rem 0 0;
+                width: 100%;
+                text-align: center;
+            }
+            .hamburger {
+                display: block;
+            }
+            .shopee-layout {
+                flex-direction: column;
+            }
+            .filter-sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (Sama Persis Homepage) -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo-container">
+                <img src="{% static 'logo.png' %}" alt="Nadicom Logo" class="logo-img">
+                <a href="/" class="logo-text">NADICOM DIGITAL</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Utama</a></li>
+                <li><a href="#profile">Profil Syarikat</a></li>
+                <li><a href="{% url 'service_list' %}">Servis</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="{% url 'video' %}">Video</a></li>
+                <li><a href="#" class="nav-link"><i class="fas fa-credit-card"></i> Bayar Bil</a></li>
+                <li><a href="#contact" class="cta-button-nav">Hubungi Kami</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <h1 class="page-title">Pakej Perkhidmatan Kami</h1>
+            
+            <div class="shopee-layout">
+                <!-- Filter Sidebar -->
+                <aside class="filter-sidebar">
+                    <h3>Kategori Servis</h3>
+                    <ul class="filter-list">
+                        <li>
+                            <a class="filter-item active" data-category="all">Semua Kategori</a>
+                        </li>
+                        {% for value, label in categories %}
+                        <li>
+                            <a class="filter-item" data-category="{{ value }}">{{ label }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </aside>
+                
+                <!-- Service Grid -->
+                <div class="service-grid">
+                    {% for service in services %}
+                    <div class="service-card" data-category="{{ service.category }}">
+                        <h3>{{ service.name }}</h3>
+                        <div class="price">RM{{ service.price }}</div>
+                        <a href="{% url 'mock_payment' service.id %}" class="pay-btn">
+                            <i class="fas fa-credit-card"></i> Bayar Sekarang
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (Sama dengan Homepage) -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Nadicom Digital Sdn Bhd. Hak cipta terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle (Sama dengan Homepage)
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Navbar Scroll Effect (Sama dengan Homepage)
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Category Filter
+        document.querySelectorAll('.filter-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active state
+                document.querySelectorAll('.filter-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Filter services
+                const category = this.dataset.category;
+                document.querySelectorAll('.service-card').forEach(card => {
+                    card.style.display = (category === 'all' || card.dataset.category === category) 
+                        ? 'block' 
+                        : 'none';
+                });
+            });
+        });
+
+        // Animation on scroll
+        const animateOnScroll = () => {
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardTop < windowHeight - 100) {
+                    card.style.opacity = 1;
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Initialize animations
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+        });
+
+        window.addEventListener('load', animateOnScroll);
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>

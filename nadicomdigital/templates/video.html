@@ -1,0 +1,422 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Video | Nadicom Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === CSS Variables === */
+        :root {
+            --primary: #555879;
+            --secondary: #98A1BC;
+            --accent: #DED3C4;
+            --light: #F4EBD3;
+            --white: #ffffff;
+            --dark: #333333;
+        }
+
+        /* === Base Styles === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* === Navigation === */
+        .navbar {
+            background-color: transparent;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar.scrolled .logo-text {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled .nav-links li a {
+            color: var(--primary);
+        }
+
+        .nav-links li a.active {
+            font-weight: 600;
+        }
+
+        .cta-button-nav {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 1.5rem;
+            border: 2px solid var(--primary);
+            display: inline-block;
+        }
+
+        .cta-button-nav:hover {
+            background-color: transparent;
+            color: var(--primary) !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar.scrolled .cta-button-nav {
+            background-color: var(--primary);
+            color: white !important;
+        }
+
+        .navbar.scrolled .cta-button-nav:hover {
+            background-color: transparent;
+            color: var(--primary) !important;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar.scrolled .hamburger {
+            color: var(--primary);
+        }
+
+        /* === Video Hero Section === */
+        .video-hero {
+            padding: 10rem 0 5rem;
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+
+        .video-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        .video-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* === Video Gallery === */
+        .video-gallery {
+            padding: 5rem 0;
+            background-color: white;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h3 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .video-info p {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        /* === Footer === */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Empty State */
+        .no-videos {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+        }
+
+        /* === Responsive Design === */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 80px;
+                right: 5%;
+                width: 90%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-radius: 5px;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 0;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid #eee;
+                width: 100%;
+            }
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+            .cta-button-nav {
+                margin: 0.5rem 0 0;
+                width: 100%;
+                text-align: center;
+            }
+            .hamburger {
+                display: block;
+            }
+            .video-hero h1 {
+                font-size: 2rem;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo-container">
+                <img src="{% static 'logo.png' %}" alt="Nadicom Logo" class="logo-img">
+                <a href="{% url 'homepage' %}" class="logo-text">NADICOM DIGITAL</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'homepage' %}">Utama</a></li>
+                <li><a href="{% url 'homepage' %}#profile">Profil Syarikat</a></li>
+                <li><a href="{% url 'homepage' %}#services">Servis</a></li>
+                <li><a href="{% url 'homepage' %}#blog">Blog</a></li>
+                <li><a href="{% url 'video' %}" class="active">Video</a></li>
+                <li><a href="#" class="nav-link"><i class="fas fa-credit-card"></i> Bayar Bil</a></li>
+                <li><a href="{% url 'homepage' %}#contact" class="cta-button-nav">Hubungi Kami</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Video Hero Section -->
+    <section class="video-hero">
+        <div class="container">
+            <h1>Galeri Video Tutorial</h1>
+            <p>Belajar menggunakan produk Nadicom melalui video panduan kami</p>
+        </div>
+    </section>
+
+    <!-- Video Gallery -->
+    <section class="video-gallery">
+        <div class="container">
+            <div class="video-grid">
+                {% for video in videos %}
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/{{ video.get_youtube_id }}" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>{{ video.title }}</h3>
+                        <p>{{ video.description }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="no-videos">
+                    <p>Tiada video tersedia buat masa ini.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Nadicom Digital Sdn Bhd. Hak cipta terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+
+        // Video Card Hover Effect
+        document.querySelectorAll('.video-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.15)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            });
+        });
+
+        // Initialize navbar state on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

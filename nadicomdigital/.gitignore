@@ -1,0 +1,23 @@
+# Python/Django ignores
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+*.env
+venv/
+.vscode/
+db.sqlite3
+*.log
+*.pot
+*.pyc
+local_settings.py
+
+# OS/Editor ignores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Django migrations (optional)
+*/migrations/*.py
+!*/migrations/__init__.py
