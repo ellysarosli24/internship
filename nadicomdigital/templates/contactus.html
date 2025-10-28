@@ -1,0 +1,899 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungi Kami | Nadicom Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* === CSS Variables === */
+        :root {
+            --primary: #555879;
+            --primary-light: #6d72a1;
+            --primary-dark: #3f4262;
+            --secondary: #98A1BC;
+            --accent: #DED3C4;
+            --accent-light: #f2ebe1;
+            --light: #F4EBD3;
+            --white: #ffffff;
+            --dark: #333333;
+            --gray: #f5f7fa;
+            --gray-dark: #e9ecef;
+            --success: #28a745;
+            --whatsapp: #25D366;
+            --transition: all 0.3s ease;
+        }
+
+        /* === Base Styles === */
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: var(--gray);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* === Navigation === */
+        .navbar {
+            background-color: transparent;
+            padding: 1.2rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 40px;
+            margin-right: 10px;
+            transition: var(--transition);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .logo-text {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 1.8rem;
+            position: relative;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .navbar.scrolled .nav-links li a {
+            color: var(--primary);
+        }
+
+        /* Underline effect for all nav items */
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s;
+        }
+
+        .nav-links li a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links li a.active {
+            color: var(--accent);
+        }
+
+        .navbar.scrolled .nav-links li a.active {
+            color: var(--primary-dark);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+            z-index: 1001;
+        }
+
+        .navbar.scrolled .hamburger {
+            color: var(--primary);
+        }
+
+        /* === Hero Section === */
+        .contact-hero {
+            padding: 11rem 0 6rem;
+            text-align: center;
+            position: relative;
+            color: white;
+            overflow: hidden;
+        }
+
+        .contact-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%),
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -1;
+        }
+
+        .contact-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .contact-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* === Main Content === */
+        .main-content {
+            padding: 3rem 0 5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+
+        /* === Contact Info Section === */
+        .contact-info-section {
+            background-color: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .contact-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-card p {
+            color: var(--dark);
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-card a:hover {
+            color: var(--primary-light);
+        }
+
+        /* === WhatsApp Button === */
+        .whatsapp-section {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--white) 100%);
+            border-radius: 12px;
+            border: 2px dashed var(--accent);
+        }
+
+        .whatsapp-btn {
+            background: var(--whatsapp);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            background: #128C7E;
+        }
+
+        .whatsapp-btn i {
+            font-size: 1.3rem;
+        }
+
+        /* === Map Section === */
+        .map-section {
+            margin: 3rem 0;
+        }
+
+        .map-section h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .map-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            height: 400px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* === Floating Contact Button === */
+        .floating-contact {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .floating-contact:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: var(--primary-dark);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-contact i {
+            font-size: 1.5rem;
+        }
+
+        /* === Footer === */
+        footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 4rem 0 1.5rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-img {
+            height: 40px;
+            margin-right: 12px;
+        }
+
+        .footer-logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .footer-about {
+            max-width: 300px;
+        }
+
+        .footer-about p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .footer-links h4, .footer-newsletter h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-links h4::after, .footer-newsletter h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .footer-links a i {
+            font-size: 0.8rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-family: inherit;
+        }
+
+        .newsletter-form button {
+            padding: 10px 15px;
+            background: var(--accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .newsletter-form button:hover {
+            background: var(--accent-light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+
+        /* === Animations === */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* === Responsive Design === */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 0;
+            }
+            
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 280px;
+                height: 100vh;
+                background: var(--white);
+                flex-direction: column;
+                padding: 5rem 2rem 2rem;
+                box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid var(--gray-dark);
+                width: 100%;
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-links li a {
+                color: var(--primary) !important;
+                display: block;
+                width: 100%;
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .contact-hero {
+                padding: 8rem 0 4rem;
+            }
+
+            .contact-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info-section {
+                padding: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-links h4::after, .footer-newsletter h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .floating-contact {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+            }
+            
+            .contact-hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .contact-hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .whatsapp-btn {
+                padding: 14px 24px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo-container">
+                <img src="{% static 'logo1.jpg' %}" alt="Nadicom Logo" class="logo-img">
+                <a href="{% url 'homepage' %}" class="logo-text">NADICOM DIGITAL</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'homepage' %}">Utama</a></li>
+                <li><a href="{% url 'profile' %}">Profil Syarikat</a></li>
+                <li><a href="{% url 'service_list' %}">Servis</a></li>
+                <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                <li><a href="{% url 'video_list' %}">Video</a></li>
+                <li><a href="{% url 'daftar_kursus' %}">Daftar Kursus</a></li>
+                <li><a href="{% url 'contactus' %}" class="active">Hubungi Kami</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="container">
+            <h1>Hubungi Nadicom Digital</h1>
+            <p>Kami sedia membantu transformasi digital perniagaan anda dengan penyelesaian terbaik</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Contact Info Section -->
+            <section class="contact-info-section">
+                <h2 class="section-title">Hubungi Kami</h2>
+                
+                <div class="contact-grid">
+                    <div class="contact-card animate-fade-in">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Alamat Kami</h3>
+                        <p><strong>Wisma MDT, Lot 3-2</strong></p>
+                        <p>Jalan Puteri Saadong</p>
+                        <p>16250 Wakaf Bharu, Kelantan</p>
+                    </div>
+                    
+                    <div class="contact-card animate-fade-in">
+                        <i class="fas fa-phone"></i>
+                        <h3>Hubungi Kami</h3>
+                        <p><strong>Telefon:</strong> <a href="tel:09-7191081">09-719 1081</a></p>
+                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/601140677332">011-4067 7332</a></p>
+                        <p><strong>Hotline:</strong> <a href="tel:60199699079">019-969 9079</a></p>
+                    </div>
+                    
+                    <div class="contact-card animate-fade-in">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email & Waktu Operasi</h3>
+                        <p><strong>Email:</strong> <a href="mailto:info@nadicom.com">info@nadicom.com</a></p>
+                        <p><strong>Waktu Operasi:</strong></p>
+                        <p>Ahad - Khamis: 9:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Button -->
+                <div class="whatsapp-section">
+                    <h3>Mahu Bertanya Secara Langsung?</h3>
+                    <p>Klik butang di bawah untuk berhubung dengan kami melalui WhatsApp</p>
+                    <button class="whatsapp-btn" id="whatsappBtn">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Kami Sekarang
+                    </button>
+                </div>
+            </section>
+
+            <!-- Map Section -->
+            <section class="map-section">
+                <h3><i class="fas fa-map-marked-alt"></i> Lokasi Kami</h3>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.0688578621357!2d102.20192399999999!3d6.1214346!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31b6af0c60081f8b%3A0x2d173795dcbd48e0!2sNADICOM%20DIGITAL%20SDN%20BHD!5e0!3m2!1sen!2smy!4v1756192449653!5m2!1sen!2smy" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Floating Contact Button -->
+    <a href="{% url 'contactus' %}" class="floating-contact">
+        <i class="fas fa-phone"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="{% static 'logo1.jpg' %}" alt="Nadicom Logo" class="footer-logo-img">
+                        <span class="footer-logo-text">NADICOM DIGITAL</span>
+                    </div>
+                    <p>Penyedia perkhidmatan digital dan kursus latihan profesional yang terkemuka di Malaysia.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1CDyjGVRJw/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://youtube.com/@nadicomtechnologycentre6099?si=_SqGyCbm-ni8Tq1o"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Pautan Pantas</h4>
+                    <ul>
+                        <li><a href="{% url 'homepage' %}"><i class="fas fa-chevron-right"></i> Utama</a></li>
+                        <li><a href="{% url 'profile' %}"><i class="fas fa-chevron-right"></i> Profil Syarikat</a></li>
+                        <li><a href="{% url 'service_list' %}"><i class="fas fa-chevron-right"></i> Servis</a></li>
+                        <li><a href="{% url 'blog_list' %}"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                        <li><a href="{% url 'video_list' %}"><i class="fas fa-chevron-right"></i> Video</a></li>
+                        <li><a href="{% url 'daftar_kursus' %}"><i class="fas fa-chevron-right"></i> Daftar Kursus</a></li>
+                        <li><a href="{% url 'contactus' %}"><i class="fas fa-chevron-right"></i> Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Nadicom Digital Sdn Bhd. Hak cipta terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==============================
+        // KONFIGURASI GREEN API - SAMA SEPERTI SEBELUM
+        // ==============================
+        const greenAPIConfig = {
+            apiUrl: "https://7107.api.green-api.com",
+            idInstance: "7107349410",
+            apiTokenInstance: "42710cbcc7f944eea81df6af84ed8bb8979cd69054e1427193",
+            companyPhoneNumber: "601140677332"
+        };
+
+        // ==============================
+        // FUNGSI WHATSAPP DENGAN GREEN API - SAMA SEPERTI SEBELUM
+        // ==============================
+        async function sendWhatsAppMessage() {
+            try {
+                // Mesej yang akan dihantar kepada company
+                const customerMessage = 
+                    "🔔 *PELANGGAN BARU DARI WEBSITE* 🔔\n\n" +
+                    "Ada visitor dari website Nadicom Digital yang ingin berhubung!\n\n" +
+                    "📅 Masa: " + new Date().toLocaleString('ms-MY') + "\n" +
+                    "🌐 Sumber: Contact Us Page\n\n" +
+                    "Sila follow up dengan segera! 🚀";
+
+                // API Endpoint untuk send message
+                const apiEndpoint = `${greenAPIConfig.apiUrl}/waInstance${greenAPIConfig.idInstance}/sendMessage/${greenAPIConfig.apiTokenInstance}`;
+                
+                console.log('Sending WhatsApp via Green API...');
+                
+                const response = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chatId: `${greenAPIConfig.companyPhoneNumber}@c.us`,
+                        message: customerMessage
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.idMessage) {
+                    console.log('WhatsApp message sent successfully via Green API!');
+                    
+                    // Buka WhatsApp untuk user terus chat dengan company
+                    const welcomeMessage = 
+                        "Hai Nadicom Digital, saya berminat untuk mengetahui lebih lanjut tentang perkhidmatan anda. Boleh tolong berikan maklumat?";
+                    
+                    const whatsappLink = `https://wa.me/${greenAPIConfig.companyPhoneNumber}?text=${encodeURIComponent(welcomeMessage)}`;
+                    window.open(whatsappLink, '_blank');
+                    
+                } else {
+                    throw new Error('Failed to send via API');
+                }
+                
+            } catch (error) {
+                console.error('Error sending via Green API:', error);
+                
+                // Fallback - direct WhatsApp link kalau API fail
+                alert('Sambungan sedang sibuk. Membuka WhatsApp terus...');
+                const whatsappLink = `https://wa.me/${greenAPIConfig.companyPhoneNumber}`;
+                window.open(whatsappLink, '_blank');
+            }
+        }
+
+        // ==============================
+        // EVENT LISTENERS
+        // ==============================
+        
+        // Mobile Menu Toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.classList.toggle('fa-times');
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+                document.querySelector('.hamburger').classList.remove('fa-times');
+            });
+        });
+
+        // WhatsApp Button Click - GUNA GREEN API SAHAJA
+        document.getElementById('whatsappBtn').addEventListener('click', sendWhatsAppMessage);
+
+        // Initialize navbar state on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            }
+            
+            // Animate elements on scroll
+            const animatedElements = document.querySelectorAll('.animate-fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.visibility = 'visible';
+                        entry.target.classList.add('animate-fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(el => {
+                el.style.visibility = 'hidden';
+                observer.observe(el);
+            });
+
+            console.log('Nadicom Digital Contact Page Loaded');
+            console.log('WhatsApp System: Green API Enabled');
+        });
+    </script>
+</body>
+</html>
