@@ -18,10 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from nadicomdigital import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('nadicomdigital/', include('nadicomdigital.urls')),
+    
+    # ✅ TAMBAH INI - direct to homepage view
+    path('', views.homepage, name='home'),
 ]
 
 if settings.DEBUG:
