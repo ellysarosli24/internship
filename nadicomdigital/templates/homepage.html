@@ -215,13 +215,11 @@
             font-weight: 600;
             text-decoration: none;
             transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             animation: fadeInUp 1.2s ease;
         }
 
         .hero-cta:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             background: var(--primary-dark);
         }
 
@@ -785,8 +783,8 @@
                 <h1>Menerajui Transformasi Digital Perakaunan Anda</h1>
                 <p>Menjadi rakan strategi digital dalam pengurusan perniagaan anda.</p>
                 <div class="cta-container">
-                    <a href="service_list.html" class="hero-cta">Terokai Perkhidmatan Kami</a>
-                    <a href="daftar_kursus.html" class="hero-cta secondary">Daftar Kursus Percuma</a>
+                    <a href="{% url 'service_list' %}" class="hero-cta">Terokai Perkhidmatan Kami</a>
+                    <a href="{% url 'daftar_kursus' %}" class="hero-cta secondary">Daftar Kursus Percuma</a>
                 </div>
             </div>
         </div>
