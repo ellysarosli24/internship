@@ -208,29 +208,43 @@
 
         .hero-cta {
             display: inline-block;
-            background: var(--primary);
+            background: transparent;
             color: white;
             padding: 12px 28px;
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
             transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             animation: fadeInUp 1.2s ease;
+            border: 2px solid white;
         }
 
         .hero-cta:hover {
             transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             background: var(--primary-dark);
         }
 
         .hero-cta.secondary {
+            display: inline-block;
             background: transparent;
             color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            animation: fadeInUp 1.2s ease;
             border: 2px solid white;
+            
         }
 
         .hero-cta.secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            background: var(--primary-dark);
         }
 
         /* === Company Profile === */
