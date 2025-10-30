@@ -139,10 +139,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ellysarosli24@gmail.com'  # Ganti dengan email Gmail anda
-EMAIL_HOST_PASSWORD = 'oyamdpmxshmemlak'  # PASTE App Password di sini
-DEFAULT_FROM_EMAIL = 'ellysarosli24@gmail.com'  # Ganti dengan email Gmail anda
-SERVER_EMAIL = 'ellysarosli24@gmail.com'
+EMAIL_HOST_USER = 'nadicomsql@gmail.com'  # Ganti dengan email Gmail anda
+EMAIL_HOST_PASSWORD = 'neuktlnwhghopzlik'  # PASTE App Password di sini
+DEFAULT_FROM_EMAIL = 'nadicomsql@gmail.com'  # Ganti dengan email Gmail anda
+SERVER_EMAIL = 'nadicomsql@gmail.com'
 
 
 # settings.py

@@ -321,7 +321,7 @@ def proses_daftar(request):
                 Lokasi: {kursus.lokasi}
 
                 Sila hadir 15 minit lebih awal untuk pendaftaran.
-                Untuk sebarang pertanyaan, sila hubungi 03-1234 5678.
+                Untuk sebarang pertanyaan, sila hubungi 09-7191081.
 
                 Harap maklum.
                 Nadicom Digital Sdn Bhd
