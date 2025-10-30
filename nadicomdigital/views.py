@@ -19,6 +19,9 @@ from django.http import FileResponse
 import os 
 from .auto_sync import auto_sync_new_videos
 from django.core.paginator import Paginator
+import sendgrid
+from sendgrid.helpers.mail import Mail
+from django.conf import settings
 
 def homepage(request):
     blog_posts = BlogPost.objects.filter(is_published=True).order_by('-published_date')[:3]
@@ -304,38 +307,40 @@ def proses_daftar(request):
             
             # Hantar emel pengesahan
             try:
-                subject = f"Pengesahan Pendaftaran Kursus: {kursus.tajuk}"
-                message = f"""
-                Terima kasih {peserta.nama} kerana mendaftar untuk kursus kami.
-
-                Butiran Pendaftaran:
-                Nama: {peserta.nama}
-                No IC: {peserta.no_ic}
-                Syarikat: {peserta.syarikat}
-                No Telefon: {peserta.no_telefon}
-                Email: {peserta.email}
+                # GUNA SENDGRID API
+                sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
                 
-                Kursus: {kursus.tajuk}
-                Tarikh: {kursus.tarikh}
-                Masa: {kursus.masa_mula} - {kursus.masa_tamat}
-                Lokasi: {kursus.lokasi}
+                message = Mail(
+                    from_email='nadicomsql@gmail.com',
+                    to_emails=peserta.email,
+                    subject=f"Pengesahan Pendaftaran Kursus: {kursus.tajuk}",
+                    plain_text_content=f"""
+                    Terima kasih {peserta.nama} kerana mendaftar untuk kursus kami.
 
-                Sila hadir 15 minit lebih awal untuk pendaftaran.
-                Untuk sebarang pertanyaan, sila hubungi 09-7191081.
+                    Butiran Pendaftaran:
+                    Nama: {peserta.nama}
+                    No IC: {peserta.no_ic}
+                    Syarikat: {peserta.syarikat}
+                    No Telefon: {peserta.no_telefon}
+                    Email: {peserta.email}
+                    
+                    Kursus: {kursus.tajuk}
+                    Tarikh: {kursus.tarikh}
+                    Masa: {kursus.masa_mula} - {kursus.masa_tamat}
+                    Lokasi: {kursus.lokasi}
 
-                Harap maklum.
-                Nadicom Digital Sdn Bhd
-                """
-                
-                send_mail(
-                    subject,
-                    message.strip(),  # strip() untuk buang whitespace
-                    settings.DEFAULT_FROM_EMAIL,
-                    [peserta.email],
-                    fail_silently=False,
+                    Sila hadir 15 minit lebih awal untuk pendaftaran.
+                    Untuk sebarang pertanyaan, sila hubungi 09-7191081.
+
+                    Harap maklum.
+                    Nadicom Digital Sdn Bhd
+                    """
                 )
                 
-                # Update status email
+                response = sg.send(message)
+                print(f"✅ Email berjaya! Status: {response.status_code}")
+                
+                # Update status
                 peserta.emel_dihantar = True
                 peserta.tarikh_emel_dihantar = timezone.now()
                 peserta.save()
@@ -344,23 +349,10 @@ def proses_daftar(request):
                 return redirect('pendaftaran_berjaya')
                 
             except Exception as e:
-                # Log error untuk debugging
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error(f"Gagal hantar email: {str(e)}")
-                
-                # Jika gagal hantar email, masih simpan rekod tetapi tunjuk warning
-                messages.warning(request, 'Pendaftaran berjaya tetapi emel pengesahan gagal dihantar. Sila hubungi kami.')
+                print(f"❌ Email error: {str(e)}")
+                messages.success(request, 'Pendaftaran berjaya! Sila hubungi 09-7191081 untuk pengesahan.')
                 return redirect('pendaftaran_berjaya')
-        else:
-            # Form tidak valid, paparkan error
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-            return redirect('daftar_kursus')
-    
-    # Jika bukan POST request, redirect ke halaman daftar
-    return redirect('daftar_kursus')
+
 
 def pendaftaran_berjaya(request):
     """Halaman kejayaan selepas pendaftaran"""
