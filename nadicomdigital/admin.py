@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Video, Service, Payment, TeamMember, GalleryImage, BlogCategory, BlogPost, Kursus, Peserta
+from .models import Video, Service, TeamMember, GalleryImage, BlogCategory, BlogPost, Kursus, Peserta
 from django.utils.html import format_html
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
@@ -18,11 +18,7 @@ class ServiceAdmin(admin.ModelAdmin):
     search_fields = ('name', 'category')  # Search functionality
     list_editable = ('price',)  # Allow editing price directly in the list view
 
-@admin.register(Payment)  # Optional: Register Payment if you want to manage it in admin
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('service', 'amount', 'is_success', 'created_at', 'customer_email')
-    list_filter = ('is_success', 'service__category')  # Filter by payment status or service category
-    search_fields = ('customer_email', 'service__name')
+
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):

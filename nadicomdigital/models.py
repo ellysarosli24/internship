@@ -67,16 +67,6 @@ class Service(models.Model):
     def __str__(self):
         return self.name
 
-# Model untuk rekod payment (mock)
-class Payment(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    is_success = models.BooleanField(default=False)  # Status payment
-    created_at = models.DateTimeField(auto_now_add=True)
-    customer_email = models.EmailField(blank=True)  # Untuk rekod
-
-    def __str__(self):
-        return f"Payment for {self.service.name}"
 
 class TeamMember(models.Model):
     photo = models.ImageField(upload_to='team/')

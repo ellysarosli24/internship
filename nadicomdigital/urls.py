@@ -10,9 +10,6 @@ urlpatterns = [
     path('video/<int:video_id>/', views.video_detail, name='video_detail'),
 
     path('services/', views.service_list, name='service_list'),
-    path('service/<int:service_id>/payment/', views.mock_payment, name='mock_payment'),
-    path('payment/<int:service_id>/receipt/', views.payment_receipt, name='payment_receipt'),
-    path('invoice/<str:transaction_id>/', views.download_invoice, name='download_invoice'),
     
     path('contactus/', views.contactus, name='contactus'),
     path('api/validate-whatsapp/', views.validate_whatsapp_number, name='validate_whatsapp'),

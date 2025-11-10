@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Video, Service, Payment, TeamMember, GalleryImage, BlogPost, BlogCategory, Kursus, Peserta
+from .models import Video, Service,  TeamMember, GalleryImage, BlogPost, BlogCategory, Kursus, Peserta
 from django import forms
 from django.core.mail import send_mail
 from django.conf import settings
@@ -34,74 +34,7 @@ def service_list(request):
         'services': services,
         'categories': categories
     })
-class PaymentForm(forms.Form):
-    name = forms.CharField(max_length=100, label='Nama Penuh')
-    email = forms.EmailField()
-    phone = forms.CharField(max_length=20, required=False, label='No Telefon')
 
-def send_payment_confirmation(payment):
-    subject = f'Pengesahan Pembayaran untuk {payment.service.name}'
-    message = f'''
-    Terima kasih atas pembayaran anda!
-    
-    Butiran Pembayaran:
-    - Perkhidmatan: {payment.service.name}
-    - Jumlah: RM{payment.service.price}
-    - Rujukan: NCM{payment.id}
-    
-    Hubungi kami jika ada sebarang pertanyaan.
-    '''
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [payment.customer_email],
-        fail_silently=False,
-    )
-
-def mock_payment(request, service_id):
-    service = get_object_or_404(Service, id=service_id)
-    
-    if request.method == 'POST':
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            payment = Payment.objects.create(
-                service=service,
-                amount=service.price,
-                customer_name=form.cleaned_data['name'],
-                customer_email=form.cleaned_data['email'],
-                customer_phone=form.cleaned_data.get('phone', ''),
-                is_success=True
-            )
-            send_payment_confirmation(payment)
-            return redirect('payment_receipt', service_id=service.id)
-    else:
-        form = PaymentForm()
-
-    return render(request, 'mock_payment.html', {
-        'service': service,
-        'form': form
-    })
-
-def payment_receipt(request, service_id):
-    service = get_object_or_404(Service, id=service_id)
-    latest_payment = Payment.objects.filter(service=service).last()
-    
-    return render(request, 'payment_receipt.html', {
-        'service': service,
-        'transaction_id': latest_payment.id if latest_payment else '000000',
-        'payment_method': 'FPX Online Banking',  # Should come from payment model
-        'payment_date': latest_payment.created_at if latest_payment else timezone.now()
-    })
-
-def download_invoice(request, transaction_id):
-    # Implement your PDF generation logic here
-    # This is a placeholder implementation
-    from django.http import HttpResponse
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="invoice_{transaction_id}.pdf"'
-    # Add your PDF generation code here
-    return response
 
 
 
@@ -307,40 +240,39 @@ def proses_daftar(request):
             
             # Hantar emel pengesahan
             try:
-                # GUNA SENDGRID API
-                sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
+                subject = f"Pengesahan Pendaftaran Kursus: {kursus.tajuk}"
+                message = f"""
+                Terima kasih {peserta.nama} kerana mendaftar untuk kursus kami.
+
+                Butiran Pendaftaran:
+                Nama: {peserta.nama}
+                No IC: {peserta.no_ic}
+                Syarikat: {peserta.syarikat}
+                No Telefon: {peserta.no_telefon}
+                Email: {peserta.email}
                 
-                message = Mail(
-                    from_email='nadicomsql@gmail.com',
-                    to_emails=peserta.email,
-                    subject=f"Pengesahan Pendaftaran Kursus: {kursus.tajuk}",
-                    plain_text_content=f"""
-                    Terima kasih {peserta.nama} kerana mendaftar untuk kursus kami.
+                Kursus: {kursus.tajuk}
+                Tarikh: {kursus.tarikh}
+                Masa: {kursus.masa_mula} - {kursus.masa_tamat}
+                Lokasi: {kursus.lokasi}
 
-                    Butiran Pendaftaran:
-                    Nama: {peserta.nama}
-                    No IC: {peserta.no_ic}
-                    Syarikat: {peserta.syarikat}
-                    No Telefon: {peserta.no_telefon}
-                    Email: {peserta.email}
-                    
-                    Kursus: {kursus.tajuk}
-                    Tarikh: {kursus.tarikh}
-                    Masa: {kursus.masa_mula} - {kursus.masa_tamat}
-                    Lokasi: {kursus.lokasi}
+                Sila hadir 15 minit lebih awal untuk pendaftaran.
+                Untuk sebarang pertanyaan, sila hubungi 09-7191081
+.
 
-                    Sila hadir 15 minit lebih awal untuk pendaftaran.
-                    Untuk sebarang pertanyaan, sila hubungi 09-7191081.
-
-                    Harap maklum.
-                    Nadicom Digital Sdn Bhd
-                    """
+                Harap maklum.
+                Nadicom Digital Sdn Bhd
+                """
+                
+                send_mail(
+                    subject,
+                    message.strip(),  # strip() untuk buang whitespace
+                    settings.DEFAULT_FROM_EMAIL,
+                    [peserta.email],
+                    fail_silently=False,
                 )
                 
-                response = sg.send(message)
-                print(f"✅ Email berjaya! Status: {response.status_code}")
-                
-                # Update status
+                # Update status email
                 peserta.emel_dihantar = True
                 peserta.tarikh_emel_dihantar = timezone.now()
                 peserta.save()
@@ -349,10 +281,23 @@ def proses_daftar(request):
                 return redirect('pendaftaran_berjaya')
                 
             except Exception as e:
-                print(f"❌ Email error: {str(e)}")
-                messages.success(request, 'Pendaftaran berjaya! Sila hubungi 09-7191081 untuk pengesahan.')
+                # Log error untuk debugging
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Gagal hantar email: {str(e)}")
+                
+                # Jika gagal hantar email, masih simpan rekod tetapi tunjuk warning
+                messages.warning(request, 'Pendaftaran berjaya tetapi emel pengesahan gagal dihantar. Sila hubungi kami.')
                 return redirect('pendaftaran_berjaya')
-
+        else:
+            # Form tidak valid, paparkan error
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+            return redirect('daftar_kursus')
+    
+    # Jika bukan POST request, redirect ke halaman daftar
+    return redirect('daftar_kursus')
 
 def pendaftaran_berjaya(request):
     """Halaman kejayaan selepas pendaftaran"""

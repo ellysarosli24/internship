@@ -25,9 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)97%705#p=(sbi3z^9^7=4%%g7spb&9vwdc8hds%beleqrlron'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['26.240.203.82', '127.0.0.1', 'localhost', 'ellysarosli.pythonanywhere.com']
+ALLOWED_HOSTS = ['26.240.203.82',
+                '127.0.0.1', 
+                'localhost', 
+                'ellysarosli.pythonanywhere.com',
+                '.railway.app',
+                '.up.railway.app',]
 
 
 # Application definition
@@ -77,12 +82,18 @@ WSGI_APPLICATION = 'InternNadicom.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -119,8 +130,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_ROOT = BASE_DIR/'staticfiles'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # === ADD THESE LINES FOR MEDIA FILES ===
 MEDIA_URL = '/media/'
@@ -134,15 +145,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 db_from_env=dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+
 # settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'apikey'  # Ganti dengan email Gmail anda
-EMAIL_HOST_PASSWORD = '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'  # PASTE App Password di sini
-DEFAULT_FROM_EMAIL = 'nadicomsql@gmail.com'  # Ganti dengan email Gmail anda
+DEFAULT_FROM_EMAIL = 'nadicomsql@gmail.com'
 SERVER_EMAIL = 'nadicomsql@gmail.com'
+
+# ✅ TAMBAH INI UNTUK BACA DARI ENVIRONMENT:
+import os
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '')
+
+# Email Configuration
+if SENDGRID_API_KEY:
+    # Jika ada API Key, enable email
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'apikey'
+    EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+else:
+    # Jika tiada API Key, disable email
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    print("⚠️  SendGrid API Key not found - email disabled")
+
 
 
 # settings.py
