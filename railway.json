@@ -1,0 +1,9 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "python manage.py migrate && gunicorn InternNadicom.wsgi:application",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
